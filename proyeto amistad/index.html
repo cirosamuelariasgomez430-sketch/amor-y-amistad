@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>Feliz Día de la Amistad</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --accent: #ffffff;
+      --accent-hover: #e0e0e0;
+      --accent-soft: #1a1a1a;
+      --page-bg: #000000;
+      --surface: #0a0a0a;
+      --ink: #ffffff;
+      --muted: #a3a3a3;
+      --muted-soft: #737373;
+      --border: #262626;
+      --field-border: #404040;
+      --field-bg: #0a0a0a;
+      --field-ink: #ffffff;
+      --decorative: #262626;
+      /* Nuevo tono dorado elegante */
+      --gold-bg: linear-gradient(135deg, #d4af37 0%, #aa7c11 50%, #f3e5ab 100%);
+      --gold-border: #f3e5ab;
+      --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+      --font-sans: "Inter", "Segoe UI", sans-serif;
+      --content-width: 1180px;
+      --shadow: 0 28px 80px rgb(255 255 255 / 4%);
+      --transition: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body[data-tema="blanco"] {
+      color-scheme: light;
+      --accent: #000000;
+      --accent-hover: #262626;
+      --accent-soft: #f2f2f2;
+      --page-bg: #ffffff;
+      --surface: #fafafa;
+      --ink: #000000;
+      --muted: #595959;
+      --muted-soft: #737373;
+      --border: #e5e5e5;
+      --field-border: #d4d4d4;
+      --field-bg: #ffffff;
+      --field-ink: #000000;
+      --decorative: #e5e5e5;
+      --gold-bg: linear-gradient(135deg, #e6ca65 0%, #b89728 50%, #f7ebd0 100%);
+      --gold-border: #b89728;
+      --shadow: 0 28px 80px rgb(0 0 0 / 6%);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--page-bg);
+      font-family: var(--font-serif);
+      font-style: italic;
+      transition: background-color 500ms ease, color 500ms ease;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+      font-style: italic;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .decoracion {
+      position: fixed;
+      z-index: 0;
+      color: rgb(255 255 255 / 20%);
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      user-select: none;
+      pointer-events: none;
+      animation: flotarConstante 6s ease-in-out infinite;
+    }
+
+    body[data-tema="blanco"] .decoracion {
+      color: rgb(0 0 0 / 12%);
+    }
+
+    .decoracion.uno { top: 10%; left: 8%; animation-duration: 7s; }
+    .decoracion.dos { right: 8%; bottom: 12%; animation-delay: 1.5s; animation-duration: 5.5s; }
+    .decoracion.tres { top: 15%; right: 25%; font-size: 1.5rem; animation-delay: 2.5s; animation-duration: 8s; }
+
+    .pagina {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      animation: entradaSuave 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .pagina::before {
+      position: absolute;
+      top: -210px;
+      right: -120px;
+      width: 540px;
+      height: 540px;
+      border-radius: 50%;
+      background: var(--decorative);
+      content: "";
+      opacity: 0.38;
+      pointer-events: none;
+      animation: pulsoCirculo 8s ease-in-out infinite;
+      transition: background-color 500ms ease;
+    }
+
+    .barra,
+    .envoltura {
+      position: relative;
+      z-index: 1;
+      width: min(var(--content-width), calc(100% - 48px));
+      margin-inline: auto;
+    }
+
+    .barra {
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0;
+    }
+
+    .marca,
+    .fecha,
+    .etiqueta,
+    .personalizar,
+    .boton,
+    .boton-secundario,
+    .copiar,
+    .mensaje-corto,
+    .dato,
+    .recuerdos-intro,
+    .recuerdo,
+    .pie {
+      font-family: var(--font-sans);
+      font-style: italic;
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .marca-corazon {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--page-bg);
+      background: var(--accent);
+      font-size: 0.95rem;
+      animation: reboteSuave 2s ease-in-out infinite;
+      transition: background-color 300ms ease, color 300ms ease;
+    }
+
+    .fecha {
+      margin: 0;
+      color: var(--muted-soft);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .envoltura {
+      margin-top: 18px;
+    }
+
+    .personalizar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0;
+      font-size: 0.75rem;
+    }
+
+    .personalizar label {
+      color: var(--muted-soft);
+      font-weight: 700;
+    }
+
+    .personalizar input,
+    .personalizar select {
+      min-height: 36px;
+      padding: 8px 10px;
+      border: 1px solid var(--field-border);
+      border-radius: 2px;
+      color: var(--field-ink);
+      background: var(--field-bg);
+      transition: border-color var(--transition), box-shadow var(--transition), transform 200ms ease;
+    }
+
+    .personalizar input:hover,
+    .personalizar select:hover {
+      transform: translateY(-1px);
+    }
+
+    .personalizar input {
+      width: 145px;
+    }
+
+    .personalizar input:focus-visible,
+    .personalizar select:focus-visible {
+      border-color: var(--accent);
+      outline: 2px solid color-mix(in srgb, var(--accent) 24%, transparent);
+      outline-offset: 1px;
+    }
+
+    .tarjeta {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+      min-height: 560px;
+      overflow: hidden;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 400ms ease;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 35px 90px rgb(255 255 255 / 7%);
+    }
+
+    body[data-tema="blanco"] .tarjeta:hover {
+      box-shadow: 0 35px 90px rgb(0 0 0 / 9%);
+    }
+
+    .contenido {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(42px, 7vw, 92px);
+    }
+
+    .etiqueta {
+      width: fit-content;
+      margin: 0 0 22px;
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+      animation: desvanecerArriba 0.8s ease backwards;
+    }
+
+    h1 {
+      max-width: 530px;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(3.1rem, 6vw, 6rem);
+      font-weight: 400;
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      font-style: italic;
+      animation: desvanecerArriba 0.9s ease backwards;
+    }
+
+    h1 em,
+    .recuerdos h2 em {
+      color: var(--muted);
+    }
+
+    .intro {
+      max-width: 430px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.75;
+      font-style: italic;
+      animation: desvanecerArriba 1s ease backwards;
+    }
+
+    .acciones {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .boton,
+    .boton-secundario,
+    .copiar {
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .boton {
+      align-self: flex-start;
+      margin-top: 27px;
+      padding: 15px 26px;
+      border-radius: 2px;
+      color: var(--page-bg);
+      background: var(--accent);
+      box-shadow: 0 10px 18px color-mix(in srgb, var(--accent) 15%, transparent);
+      transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
+    }
+
+    .boton:hover,
+    .boton:focus-visible {
+      background: var(--accent-hover);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 26px color-mix(in srgb, var(--accent) 25%, transparent);
+      outline: none;
+    }
+
+    .boton-secundario {
+      margin-top: 27px;
+      padding: 12px 0;
+      color: var(--muted);
+      background: transparent;
+      font-size: 0.86rem;
+      transition: color var(--transition), transform 200ms ease;
+    }
+
+    .boton-secundario:hover,
+    .boton-secundario:focus-visible {
+      color: var(--accent);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .carta {
+      max-width: 490px;
+      margin: 24px 0 0;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      color: var(--muted);
+      background: var(--accent-soft);
+      font-size: 1rem;
+      line-height: 1.65;
+      font-style: italic;
+      animation: aparecerConDesplazamiento 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .carta[hidden],
+    .copiar[hidden] {
+      display: none;
+    }
+
+    .carta .nombre,
+    .firma,
+    .copiar {
+      color: var(--accent);
+    }
+
+    .firma {
+      display: block;
+      margin-top: 12px;
+      font-size: 1.3rem;
+      font-style: italic;
+    }
+
+    .copiar {
+      margin: 14px 0 0;
+      padding: 0;
+      background: transparent;
+      font-size: 0.75rem;
+      transition: transform 200ms ease;
+    }
+
+    .copiar:hover,
+    .copiar:focus-visible {
+      text-decoration: underline;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .datos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 32px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dato {
+      padding: 21px 18px 22px 0;
+      transition: transform 300ms ease;
+    }
+
+    .dato:hover {
+      transform: translateY(-3px);
+    }
+
+    .dato strong,
+    .dato span {
+      display: block;
+    }
+
+    .dato strong {
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+
+    .dato span {
+      margin-top: 5px;
+      color: var(--muted-soft);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Fondo dorado elegante para la sección derecha */
+    .ilustracion {
+      position: relative;
+      display: grid;
+      min-height: 340px;
+      place-items: center;
+      overflow: hidden;
+      background: var(--gold-bg);
+      transition: background 500ms ease;
+    }
+
+    .ilustracion::before,
+    .ilustracion::after {
+      position: absolute;
+      border: 2px solid var(--gold-border);
+      border-radius: 50%;
+      content: "";
+      opacity: 0.3;
+      animation: rotarAnillos 15s linear infinite;
+    }
+
+    .ilustracion::before {
+      width: 370px;
+      height: 370px;
+    }
+
+    .ilustracion::after {
+      width: 230px;
+      height: 230px;
+      animation-direction: reverse;
+      animation-duration: 10s;
+    }
+
+    .corazon {
+      position: relative;
+      z-index: 1;
+      color: var(--page-bg);
+      font-size: clamp(8rem, 18vw, 13rem);
+      line-height: 1;
+      animation: latidoDinamico 1.4s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+    }
+
+    .mensaje-corto {
+      position: absolute;
+      right: 12%;
+      bottom: 12%;
+      z-index: 1;
+      margin: 0;
+      color: var(--page-bg);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .recuerdos {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 44px;
+      padding: 82px 0 92px;
+    }
+
+    .recuerdos h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1;
+      font-style: italic;
+    }
+
+    .recuerdos-intro {
+      margin-top: 16px;
+      color: var(--muted-soft);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .lista-recuerdos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .recuerdo {
+      min-height: 155px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 63%, transparent);
+      transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease, background-color 300ms ease;
+    }
+
+    .recuerdo:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+    }
+
+    .recuerdo-icono {
+      color: var(--accent);
+      font-size: 1.5rem;
+      display: inline-block;
+      transition: transform 300ms ease;
+    }
+
+    .recuerdo:hover .recuerdo-icono {
+      transform: scale(1.2) rotate(8deg);
+    }
+
+    .recuerdo h3 {
+      margin: 35px 0 5px;
+      color: var(--ink);
+      font-size: 0.88rem;
+      font-style: italic;
+    }
+
+    .recuerdo p {
+      margin: 0;
+      color: var(--muted-soft);
+      font-size: 0.75rem;
+      line-height: 1.45;
+      font-style: italic;
+    }
+
+    .pie {
+      padding: 24px 0 30px;
+      border-top: 1px solid var(--border);
+      color: var(--muted-soft);
+      font-size: 0.75rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .corazon-flotante {
+      position: fixed;
+      z-index: 10;
+      color: #d4af37;
+      pointer-events: none;
+      animation: subirDinamico 1.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    /* Keyframes de Movimiento Dinámico */
+    @keyframes latidoDinamico {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      30% { transform: scale(1.12) rotate(-2deg); }
+      50% { transform: scale(0.96) rotate(2deg); }
+      70% { transform: scale(1.08) rotate(0deg); }
+    }
+
+    @keyframes flotarConstante {
+      0%, 100% { transform: translateY(0) rotate(-6deg) scale(1); }
+      50% { transform: translateY(-22px) rotate(8deg) scale(1.05); }
+    }
+
+    @keyframes pulsoCirculo {
+      0%, 100% { transform: scale(1); opacity: 0.38; }
+      50% { transform: scale(1.08); opacity: 0.55; }
+    }
+
+    @keyframes rotarAnillos {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes entradaSuave {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes desvanecerArriba {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes aparecerConDesplazamiento {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes subirDinamico {
+      from { opacity: 1; transform: translateY(0) scale(0.6) rotate(-15deg); }
+      to { opacity: 0; transform: translateY(-220px) scale(1.3) rotate(25deg); }
+    }
+
+    @keyframes reboteSuave {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @media (max-width: 760px) {
+      .barra,
+      .envoltura {
+        width: min(calc(100% - 28px), 560px);
+      }
+
+      .barra {
+        padding: 20px 0;
+      }
+
+      .fecha,
+      .decoracion {
+        display: none;
+      }
+
+      .personalizar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .personalizar input,
+      .personalizar select {
+        width: 100%;
+      }
+
+      .tarjeta {
+        grid-template-columns: 1fr;
+      }
+
+      .ilustracion {
+        min-height: 270px;
+        order: -1;
+      }
+
+      .contenido {
+        padding: 38px 28px 42px;
+      }
+
+      .mensaje-corto {
+        right: 9%;
+        bottom: 9%;
+      }
+
+      .recuerdos {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 58px 0 65px;
+      }
+
+      .lista-recuerdos {
+        grid-template-columns: 1fr;
+      }
+
+      .recuerdo {
+        min-height: 0;
+      }
+
+      .recuerdo h3 {
+        margin-top: 18px;
+      }
+
+      .datos {
+        margin-top: 28px;
+      }
+
+      .dato {
+        padding-right: 9px;
+      }
+
+      .dato strong {
+        font-size: 1rem;
+      }
+
+      .dato span {
+        font-size: 0.59rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body data-tema="negro">
+  <span class="decoracion uno" aria-hidden="true">✦</span>
+  <span class="decoracion dos" aria-hidden="true">♡</span>
+  <span class="decoracion tres" aria-hidden="true">✿</span>
+
+  <div class="pagina">
+    <header class="barra">
+      <div class="marca">
+        <span class="marca-corazon" aria-hidden="true">♥</span>
+        Carta para ti
+      </div>
+      <p class="fecha">Una pequeña celebración · 2026</p>
+    </header>
+
+    <div class="envoltura">
+      <div class="personalizar" aria-label="Personalizar la carta">
+        <label for="nombre">Escribe un nombre:</label>
+        <input
+          id="nombre"
+          type="text"
+          maxlength="24"
+          placeholder="Tu persona especial"
+          autocomplete="off"
+        >
+
+        <label for="tema">Estilo:</label>
+        <select id="tema">
+          <option value="negro">Minimalista oscuro</option>
+          <option value="blanco">Minimalista claro</option>
+        </select>
+      </div>
+
+      <main class="tarjeta">
+        <section class="contenido">
+          <p class="etiqueta">Para una persona especial</p>
+          <h1>La amistad hace la vida más <em>bonita.</em></h1>
+          <p class="intro">
+            Hay personas que llegan y convierten los días normales en recuerdos extraordinarios.
+            Esta carta es para agradecerte por ser una de ellas.
+          </p>
+
+          <div class="acciones">
+            <button
+              class="boton"
+              id="verMensaje"
+              type="button"
+              aria-controls="carta"
+              aria-expanded="false"
+            >
+              <span id="verMensajeTexto">Ver mi mensaje</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button class="boton-secundario" id="sorpresa" type="button">
+              Abrir una sorpresa ✦
+            </button>
+          </div>
+
+          <p class="carta" id="carta" role="status" hidden>
+            Querido <span class="nombre" id="nombreEnCarta">amigo o amiga</span>:
+            gracias por llenar mi vida de alegría. Tu compañía es un regalo que valoro muchísimo.
+            ¡Que nuestra amistad siga creciendo y celebrando muchos momentos bonitos! 💌
+            <span class="firma">Con cariño, siempre</span>
+          </p>
+
+          <button class="copiar" id="copiar" type="button" hidden>
+            Copiar mi mensaje
+          </button>
+
+          <div class="datos" aria-label="Detalles de nuestra amistad">
+            <div class="dato">
+              <strong>∞</strong>
+              <span>Momentos por vivir</span>
+            </div>
+            <div class="dato">
+              <strong>100%</strong>
+              <span>Cariño sincero</span>
+            </div>
+            <div class="dato">
+              <strong>1</strong>
+              <span>Amistad especial</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="ilustracion" aria-label="Corazón decorativo elegante">
+          <div class="corazon" aria-hidden="true">♥</div>
+          <p class="mensaje-corto">Amistad para siempre</p>
+        </aside>
+      </main>
+
+      <section class="recuerdos" aria-labelledby="recuerdos-titulo">
+        <div>
+          <h2 id="recuerdos-titulo">
+            Lo que hace especial<br>
+            <em>nuestra amistad.</em>
+          </h2>
+          <p class="recuerdos-intro">
+            Pequeños detalles que se quedan para siempre en el corazón.
+          </p>
+        </div>
+
+        <div class="lista-recuerdos">
+          <article class="recuerdo">
+            <span class="recuerdo-icono" aria-hidden="true">☀</span>
+            <h3>Las risas</h3>
+            <p>Porque contigo hasta lo sencillo se vuelve divertido.</p>
+          </article>
+
+          <article class="recuerdo">
+            <span class="recuerdo-icono" aria-hidden="true">♡</span>
+            <h3>La confianza</h3>
+            <p>Un lugar seguro para ser exactamente quien eres.</p>
+          </article>
+
+          <article class="recuerdo">
+            <span class="recuerdo-icono" aria-hidden="true">✦</span>
+            <h3>Los recuerdos</h3>
+            <p>Historias que seguiremos contando una y otra vez.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="pie">
+        Hecho con cariño para celebrar una amistad que vale oro · ♥
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+
+    const elementos = {
+      boton: $('#verMensaje'),
+      botonTexto: $('#verMensajeTexto'),
+      carta: $('#carta'),
+      sorpresa: $('#sorpresa'),
+      copiar: $('#copiar'),
+      nombre: $('#nombre'),
+      nombreEnCarta: $('#nombreEnCarta'),
+      tema: $('#tema')
+    };
+
+    const setCartaVisible = (visible) => {
+      elementos.carta.hidden = !visible;
+      elementos.copiar.hidden = !visible;
+      elementos.boton.setAttribute('aria-expanded', String(visible));
+      elementos.botonTexto.textContent = visible ? 'Ocultar mensaje' : 'Ver mi mensaje';
+    };
+
+    const lanzarCorazones = () => {
+      const fragmento = document.createDocumentFragment();
+
+      for (let indice = 0; indice < 14; indice += 1) {
+        const corazon = document.createElement('span');
+        corazon.className = 'corazon-flotante';
+        corazon.textContent = indice % 2 === 0 ? '♥' : '✦';
+        corazon.style.left = `${15 + Math.random() * 70}%`;
+        corazon.style.top = `${45 + Math.random() * 25}%`;
+        corazon.style.animationDelay = `${Math.random() * 0.4}s`;
+        corazon.addEventListener('animationend', () => corazon.remove(), { once: true });
+        fragmento.appendChild(corazon);
+      }
+
+      document.body.appendChild(fragmento);
+    };
+
+    const copiarTexto = async (texto) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(texto);
+        return;
+      }
+
+      const temporal = document.createElement('textarea');
+      temporal.value = texto;
+      temporal.setAttribute('readonly', '');
+      temporal.style.position = 'fixed';
+      temporal.style.opacity = '0';
+      document.body.appendChild(temporal);
+      temporal.select();
+      document.execCommand('copy');
+      temporal.remove();
+    };
+
+    elementos.boton.addEventListener('click', () => {
+      setCartaVisible(elementos.carta.hidden);
+    });
+
+    elementos.sorpresa.addEventListener('click', () => {
+      setCartaVisible(true);
+      lanzarCorazones();
+      elementos.carta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    elementos.nombre.addEventListener('input', ({ currentTarget }) => {
+      elementos.nombreEnCarta.textContent = currentTarget.value.trim() || 'amigo o amiga';
+    });
+
+    elementos.tema.addEventListener('change', ({ currentTarget }) => {
+      document.body.dataset.tema = currentTarget.value;
+    });
+
+    elementos.copiar.addEventListener('click', async () => {
+      const etiquetaOriginal = elementos.copiar.textContent.trim();
+
+      try {
+        await copiarTexto(elementos.carta.innerText.trim());
+        elementos.copiar.textContent = 'Mensaje copiado ✓';
+      } catch {
+        elementos.copiar.textContent = 'No se pudo copiar';
+      }
+
+      window.setTimeout(() => {
+        elementos.copiar.textContent = etiquetaOriginal;
+      }, 1800);
+    });
+  </script>
+</body>
+</html>
